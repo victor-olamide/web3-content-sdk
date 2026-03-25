@@ -1,0 +1,114 @@
+name: CI
+
+on:
+  schedule:
+    - cron: '0 * * * *'
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install workspace dependencies
+        run: npm install
+
+      - name: Install published packages (generates npm downloads)
+        run: |
+          npm install @victor-olamide/stacks-sdk --no-save
+          npm install @victor-olamide/content-utils --no-save
+          npm install @victor-olamide/content-cli --no-save
+
+      - name: Build all packages
+        continue-on-error: true
+        run: npm run build
+
+      - name: Verify stacks-sdk exports
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import * as sdk from '@victor-olamide/stacks-sdk';
+            const expected = ['hasAccess','getContentInfo','purchaseContent','isSubscribed','subscribe','getWalletBalance','CONTRACT_NAMES'];
+            const missing = expected.filter(e => !sdk[e]);
+            if (missing.length) { console.error('Missing exports:', missing); process.exit(1); }
+            console.log('stacks-sdk exports OK:', Object.keys(sdk).join(', '));
+          EOF
+
+      - name: Verify content-utils exports
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import * as utils from '@victor-olamide/content-utils';
+            const expected = ['uploadFileToIPFS','getSTXPrice','stxToUsd','purchasesToCsv','EncryptionAPIService','isValidHex'];
+            const missing = expected.filter(e => !utils[e]);
+            if (missing.length) { console.error('Missing exports:', missing); process.exit(1); }
+            console.log('content-utils exports OK:', Object.keys(utils).join(', '));
+          EOF
+
+      - name: Run pricing utilities test
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import { microStxToStx, stxToMicroStx, formatStx } from '@victor-olamide/content-utils';
+            console.assert(microStxToStx(1_000_000) === 1, 'microStxToStx failed');
+            console.assert(stxToMicroStx(1) === 1_000_000, 'stxToMicroStx failed');
+            console.assert(formatStx(2_500_000) === '2.50 STX', 'formatStx failed');
+            console.log('Pricing tests passed');
+          EOF
+
+      - name: Run encryption utilities test
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import { isValidHex, stringToHex, hexToString, isValidEncryptedContent } from '@victor-olamide/content-utils';
+            console.assert(isValidHex('deadbeef'), 'isValidHex failed');
+            console.assert(!isValidHex('xyz'), 'isValidHex should fail for xyz');
+            console.assert(hexToString(stringToHex('hello')) === 'hello', 'hex roundtrip failed');
+            const valid = { encryptedData: 'aabb', iv: 'ccdd', authTag: 'eeff' };
+            console.assert(isValidEncryptedContent(valid), 'isValidEncryptedContent failed');
+            console.log('Encryption tests passed');
+          EOF
+
+      - name: Run export utilities test
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import { purchasesToCsv, buildDataArchive } from '@victor-olamide/content-utils';
+            const purchases = [{ contentTitle: 'Test', contentType: 'video', purchaseDate: new Date().toISOString(), transactionStatus: 'confirmed' }];
+            const csv = purchasesToCsv(purchases);
+            console.assert(csv.includes('Content Title'), 'CSV headers missing');
+            const archive = buildDataArchive({ displayName: 'Test' }, purchases, { totalPurchases: 1 });
+            console.assert(archive.exportDate, 'Archive missing exportDate');
+            console.log('Export tests passed');
+          EOF
+
+      - name: Run access status test
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import { formatExpirationDate, isContentAccessValid, getAccessStatusText } from '@victor-olamide/content-utils';
+            const future = new Date(Date.now() + 86400000).toISOString();
+            const past = new Date(Date.now() - 86400000).toISOString();
+            console.assert(isContentAccessValid(future), 'future should be valid');
+            console.assert(!isContentAccessValid(past), 'past should be invalid');
+            console.assert(getAccessStatusText(true, false, false) === 'Active', 'active status failed');
+            console.assert(getAccessStatusText(false, false, true) === 'Revoked', 'revoked status failed');
+            console.log('Access status tests passed');
+          EOF

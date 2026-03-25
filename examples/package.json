@@ -1,0 +1,12 @@
+{
+  "name": "web3-content-sdk-examples",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Examples and demos for the web3-content-sdk packages",
+  "dependencies": {
+    "@victor-olamide/stacks-sdk": "^1.0.0",
+    "@victor-olamide/content-utils": "^1.0.0",
+    "@victor-olamide/content-cli": "^1.0.0"
+  }
+}

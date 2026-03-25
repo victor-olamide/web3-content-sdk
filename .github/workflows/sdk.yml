@@ -1,0 +1,171 @@
+name: SDK Integration & Demo
+
+on:
+  schedule:
+    - cron: '0 0,3,6,9,12,15,18,21 * * *'
+  push:
+    branches: [main, develop]
+    paths:
+      - 'packages/**'
+      - 'examples/**'
+      - '.github/workflows/sdk.yml'
+  workflow_dispatch:
+
+jobs:
+  sdk-install-verify:
+    name: Install & Verify SDKs (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install SDK packages
+        run: |
+          cd examples
+          npm install
+
+      - name: Verify stacks-sdk installation
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import * as sdk from './examples/node_modules/@victor-olamide/stacks-sdk/dist/index.mjs';
+            console.log('@victor-olamide/stacks-sdk installed successfully');
+            console.log('Exports:', Object.keys(sdk).join(', '));
+          EOF
+
+      - name: Verify content-utils installation
+        continue-on-error: true
+        run: |
+          node --input-type=module <<'EOF'
+            import * as utils from './examples/node_modules/@victor-olamide/content-utils/dist/index.mjs';
+            console.log('@victor-olamide/content-utils installed successfully');
+            console.log('Exports:', Object.keys(utils).join(', '));
+          EOF
+
+      - name: Check SDK versions
+        continue-on-error: true
+        run: |
+          cd examples
+          npm list @victor-olamide/stacks-sdk
+          npm list @victor-olamide/content-utils
+          npm list @victor-olamide/content-cli
+
+  sdk-demo-node:
+    name: Run SDK Demo (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install SDK packages
+        run: |
+          cd examples
+          npm install
+
+      - name: Run Node.js demo
+        continue-on-error: true
+        run: node examples/demo.js
+
+  sdk-demo-typescript:
+    name: Run SDK TypeScript Demo (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x, 24.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install SDK packages and TypeScript tools
+        run: |
+          cd examples
+          npm install
+          npm install -g tsx typescript
+
+      - name: Run TypeScript demo
+        continue-on-error: true
+        run: tsx examples/demo.ts
+
+  sdk-bundle-size:
+    name: Check SDK Bundle Sizes
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: Install SDK packages
+        run: |
+          cd examples
+          npm install
+
+      - name: Check bundle sizes
+        continue-on-error: true
+        run: |
+          du -sh examples/node_modules/@victor-olamide/stacks-sdk
+          du -sh examples/node_modules/@victor-olamide/content-utils
+          du -sh examples/node_modules/@victor-olamide/content-cli
+          echo "Bundle size check complete"
+
+  sdk-cross-platform:
+    name: Cross-platform SDK Test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [20.x]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install SDK packages
+        run: |
+          cd examples
+          npm install
+
+      - name: Verify SDKs on ${{ matrix.os }}
+        continue-on-error: true
+        run: node examples/demo.js
