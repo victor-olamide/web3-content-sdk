@@ -1,0 +1,17 @@
+{
+  "name": "web3-content-sdk",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "build:sdk": "npm run build --workspace=packages/stacks-sdk",
+    "build:utils": "npm run build --workspace=packages/content-utils",
+    "build:cli": "npm run build --workspace=packages/cli",
+    "publish:sdk": "npm publish --workspace=packages/stacks-sdk --access public",
+    "publish:utils": "npm publish --workspace=packages/content-utils --access public",
+    "publish:cli": "npm publish --workspace=packages/cli --access public",
+    "publish:all": "npm run publish:sdk && npm run publish:utils && npm run publish:cli"
+  }
+}

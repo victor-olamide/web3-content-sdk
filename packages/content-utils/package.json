@@ -1,0 +1,49 @@
+{
+  "name": "@victor-olamide/content-utils",
+  "version": "1.0.0",
+  "description": "Utilities for Web3 content monetization — encryption helpers, IPFS/Pinata uploads, STX price conversion, and data export",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch"
+  },
+  "keywords": [
+    "stacks",
+    "stx",
+    "web3",
+    "ipfs",
+    "pinata",
+    "encryption",
+    "content-monetization",
+    "export",
+    "csv"
+  ],
+  "author": "victor-olamide",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization.git",
+    "directory": "packages/content-utils"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "form-data": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
