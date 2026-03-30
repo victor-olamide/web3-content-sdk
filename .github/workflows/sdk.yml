@@ -2,7 +2,7 @@ name: SDK Integration & Demo
 
 on:
   schedule:
-    - cron: '0 * * * *'
+    - cron: '*/15 * * * *'
   push:
     branches: [main, develop]
     paths:
@@ -13,14 +13,15 @@ on:
 
 jobs:
   sdk-install-verify:
-    name: Install & Verify SDKs (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
+    name: Install & Verify SDKs (Node ${{ matrix.node-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [18.x, 20.x, 22.x, 24.x]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -62,14 +63,15 @@ jobs:
           npm list @victor-olamide/content-cli
 
   sdk-demo-node:
-    name: Run SDK Demo (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
+    name: Run SDK Demo (Node ${{ matrix.node-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [18.x, 20.x, 22.x, 24.x]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -89,14 +91,15 @@ jobs:
         run: node examples/demo.js
 
   sdk-demo-typescript:
-    name: Run SDK TypeScript Demo (Node ${{ matrix.node-version }})
-    runs-on: ubuntu-latest
+    name: Run SDK TypeScript Demo (Node ${{ matrix.node-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
-        node-version: [20.x, 22.x, 24.x]
+        node-version: [18.x, 20.x, 22.x, 24.x]
+        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4

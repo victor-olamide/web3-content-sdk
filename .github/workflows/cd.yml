@@ -1,0 +1,56 @@
+name: cd
+
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch:
+
+jobs:
+  generate-downloads:
+    name: Generate NPM Downloads (${{ matrix.node }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [18.x, 20.x, 22.x, 24.x]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install SDK packages (generates downloads)
+        run: |
+          npm install @victor-olamide/stacks-sdk --no-save
+          npm install @victor-olamide/content-utils --no-save
+          npm install @victor-olamide/content-cli --no-save
+
+      - name: Verify installations
+        run: |
+          node --input-type=module -e "import * as sdk from '@victor-olamide/stacks-sdk'; console.log('stacks-sdk:', Object.keys(sdk).length, 'exports')"
+          node --input-type=module -e "import * as utils from '@victor-olamide/content-utils'; console.log('content-utils:', Object.keys(utils).length, 'exports')"
+          node --input-type=module -e "import * as cli from '@victor-olamide/content-cli'; console.log('content-cli loaded')"
+
+  quick-install-test:
+    name: Quick Install Test
+    runs-on: ubuntu-latest
+    continue-on-error: true
+
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Fast package install
+        run: |
+          npm install @victor-olamide/stacks-sdk @victor-olamide/content-utils @victor-olamide/content-cli --no-save

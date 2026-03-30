@@ -2,6 +2,10 @@
   "name": "@victor-olamide/content-cli",
   "version": "1.0.0",
   "description": "CLI tool for deploying and managing Web3 content monetization contracts on Stacks",
+  "homepage": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/tree/main/packages/cli#readme",
+  "bugs": {
+    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/issues"
+  },
   "bin": {
     "content-cli": "./dist/index.js"
   },
@@ -23,7 +27,14 @@
     "content-monetization",
     "deploy",
     "clarity",
-    "blockchain"
+    "blockchain",
+    "command-line",
+    "tool",
+    "smart-contracts",
+    "bitcoin",
+    "cryptocurrency",
+    "terminal",
+    "automation"
   ],
   "author": "victor-olamide",
   "license": "MIT",

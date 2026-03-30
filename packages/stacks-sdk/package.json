@@ -2,6 +2,10 @@
   "name": "@victor-olamide/stacks-sdk",
   "version": "1.0.0",
   "description": "Stacks blockchain SDK for Web3 content monetization — pay-per-view, token gating, and subscription contract interactions",
+  "homepage": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/tree/main/packages/stacks-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/issues"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,7 +33,14 @@
     "token-gating",
     "nft",
     "clarity",
-    "bitcoin"
+    "bitcoin",
+    "cryptocurrency",
+    "defi",
+    "smart-contracts",
+    "typescript",
+    "sdk",
+    "payments",
+    "subscription"
   ],
   "author": "victor-olamide",
   "license": "MIT",

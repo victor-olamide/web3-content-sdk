@@ -2,6 +2,10 @@
   "name": "@victor-olamide/content-utils",
   "version": "1.0.0",
   "description": "Utilities for Web3 content monetization — encryption helpers, IPFS/Pinata uploads, STX price conversion, and data export",
+  "homepage": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/tree/main/packages/content-utils#readme",
+  "bugs": {
+    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/issues"
+  },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -28,7 +32,13 @@
     "encryption",
     "content-monetization",
     "export",
-    "csv"
+    "csv",
+    "file-upload",
+    "crypto",
+    "price-conversion",
+    "bitcoin",
+    "typescript",
+    "utilities"
   ],
   "author": "victor-olamide",
   "license": "MIT",
