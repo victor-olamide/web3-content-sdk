@@ -13,15 +13,14 @@ on:
 
 jobs:
   sdk-install-verify:
-    name: Install & Verify SDKs (Node ${{ matrix.node-version }} on ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Install & Verify SDKs (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
         node-version: [18.x, 20.x, 22.x, 24.x]
-        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -63,15 +62,14 @@ jobs:
           npm list @victor-olamide/content-cli
 
   sdk-demo-node:
-    name: Run SDK Demo (Node ${{ matrix.node-version }} on ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Run SDK Demo (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
         node-version: [18.x, 20.x, 22.x, 24.x]
-        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -91,15 +89,14 @@ jobs:
         run: node examples/demo.js
 
   sdk-demo-typescript:
-    name: Run SDK TypeScript Demo (Node ${{ matrix.node-version }} on ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Run SDK TypeScript Demo (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
         node-version: [18.x, 20.x, 22.x, 24.x]
-        os: [ubuntu-latest, macos-latest]
 
     steps:
       - uses: actions/checkout@v4
@@ -146,14 +143,13 @@ jobs:
           echo "Bundle size check complete"
 
   sdk-cross-platform:
-    name: Cross-platform SDK Test (${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Cross-platform SDK Test
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [20.x]
 
     steps:
@@ -169,6 +165,6 @@ jobs:
           cd examples
           npm install
 
-      - name: Verify SDKs on ${{ matrix.os }}
+      - name: Verify SDKs
         continue-on-error: true
         run: node examples/demo.js

@@ -7,15 +7,14 @@ on:
 
 jobs:
   generate-downloads:
-    name: Generate NPM Downloads (${{ matrix.node }} on ${{ matrix.os }})
-    runs-on: ${{ matrix.os }}
+    name: Generate NPM Downloads (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
     continue-on-error: true
 
     strategy:
       fail-fast: false
       matrix:
         node-version: [18.x, 20.x, 22.x, 24.x]
-        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
       - name: Setup Node.js ${{ matrix.node-version }}
