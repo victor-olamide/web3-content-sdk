@@ -2,9 +2,9 @@
   "name": "@victor-olamide/content-utils",
   "version": "1.0.0",
   "description": "Utilities for Web3 content monetization — encryption helpers, IPFS/Pinata uploads, STX price conversion, and data export",
-  "homepage": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/tree/main/packages/content-utils#readme",
+  "homepage": "https://github.com/victor-olamide/web3-content-sdk/tree/main/packages/content-utils#readme",
   "bugs": {
-    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization/issues"
+    "url": "https://github.com/victor-olamide/web3-content-sdk/issues"
   },
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",
@@ -44,7 +44,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/victor-olamide/victor-olamide-Web3-Content-Monetization.git",
+    "url": "https://github.com/victor-olamide/web3-content-sdk.git",
     "directory": "packages/content-utils"
   },
   "dependencies": {
