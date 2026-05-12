@@ -2,7 +2,7 @@ name: CI
 
 on:
   schedule:
-    - cron: '*/10 * * * *'
+    - cron: '0 */3 * * *'
   push:
     branches: [main]
   pull_request:
@@ -30,7 +30,7 @@ jobs:
       - name: Install workspace dependencies
         run: npm install
 
-      - name: Install published packages (generates npm downloads)
+      - name: Install published packages
         run: |
           npm install @victor-olamide/stacks-sdk --no-save
           npm install @victor-olamide/content-utils --no-save
